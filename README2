@@ -1,0 +1,39 @@
+Q2..
+
+
+##in cetnos A
+created two network interface one to wan and other for lan
+ifup ens33 (NAT)
+ifup ens36 (Host only)172.16.5.129
+
+uuidgen ens36
+cd /etc/sysconf/network-scripts
+cp ens33 ens36
+vi ens36
+change the change uuid, name and device in conf file
+
+
+systemctl restart network
+
+##in centosB
+
+ip a
+ifup ens33 (Host-only)
+vi /etc/sysconf/network-scripts/ifcfg-ens33
+Add
+IPADDR=172.16.5.130 
+NETMASK=255.255.255.0
+GATEWAY=172.16.5.129
+ZONE=public
+
+systemctl restart network
+
+######In centos A
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+
+sysctl -w net.ipv4.ip_forward=1
+
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -I POSTROUTING -o ens33 -j MASQUERADE -s ens36
