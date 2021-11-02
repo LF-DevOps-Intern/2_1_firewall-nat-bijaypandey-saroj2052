@@ -1,0 +1,17 @@
+Q1
+yum install firewalld (pre-installed in centos 7)
+systemctl enable firewalld
+firewall-cmd –state
+
+firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='180.76.15.0/24' reject"
+firewall-cmd –reload
+
+
+firewall-cmd –zone=public–add-service=ssh --permanent//(pre-allowed)
+firewall-cmd --zone=public –add-service=http --permanent
+firewall-cmd --zone=public –add-service=https --permanent
+firewall-cmd --reload
+firewall-cmd –zone=public--list-all
+
+firewall-cmd --zone=public –add-service=samba –-permanent
+firewall-cmd --reload
